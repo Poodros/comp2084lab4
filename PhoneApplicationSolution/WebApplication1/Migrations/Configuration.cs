@@ -1,0 +1,59 @@
+﻿namespace WebApplication1.Migrations
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
+    using WebApplication1.Models;
+
+    internal sealed class Configuration : DbMigrationsConfiguration<WebApplication1.Models.DataContext>
+    {
+        public Configuration()
+        {
+            AutomaticMigrationsEnabled = true;
+        }
+
+        protected override void Seed(WebApplication1.Models.DataContext context)
+        {
+            var manufacturers = new List<Manufacturer>
+{
+new Manufacturer {
+ManufacturerName = "Apple",
+URL = "www.apple.ca",
+Founded = new DateTime(1968,10,20),
+PhoneList = new List<Phone>() },
+new Manufacturer {
+ManufacturerName = "Samsung",
+URL = "www.samsung.ca",
+Founded = new DateTime(1950,10,20),
+PhoneList = new List<Phone>()  },
+};
+            manufacturers.ForEach(s => context.Manufacturer.Add(s));
+            context.SaveChanges();
+
+            var phones = new List<Phone>
+{
+new Phone {
+PhoneName = "iPhone 11 Pro",
+MSRP = 1500,
+DateReleased = new DateTime(2019,10,20),
+ManufacturerID= manufacturers.Single(x => x.ManufacturerName == "Apple").ManufacturerID
+},
+new Phone {
+PhoneName = "iPhone XR",
+MSRP = 1000,
+DateReleased = new DateTime(2018,01,20),
+ManufacturerID = manufacturers.Single(x => x.ManufacturerName == "Apple").ManufacturerID },
+new Phone {
+PhoneName = "Galaxy S10",
+MSRP = 700,
+DateReleased = new DateTime(2016,10,20),
+ManufacturerID = manufacturers.Single(x =>  x.ManufacturerName == "Samsung").ManufacturerID  }
+};
+            phones.ForEach(s => context.Phone.Add(s));
+            context.SaveChanges();
+
+        }
+    }
+}
